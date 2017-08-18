@@ -10,6 +10,7 @@
 	</head>
 	<body>
 		<script src="scripts/three.js"></script>
+
 		<script>
 			startTime = new Date();
 			var scene = new THREE.Scene();
@@ -63,6 +64,18 @@
 			});
 			var arpanalyser = new THREE.AudioAnalyser( arpsound, 32 );
 
+			var basslistener = new THREE.AudioListener();
+			camera.add( basslistener );
+			var basssound = new THREE.Audio( arplistener );
+			var bassaudioLoader = new THREE.AudioLoader();
+			bassaudioLoader.load( 'bass.mp3', function( bassbuffer ) {
+				basssound.setBuffer( bassbuffer );
+				basssound.setLoop(false);
+				basssound.setVolume(0.01);
+				basssound.play();
+			});
+			var bassanalyser = new THREE.AudioAnalyser( basssound, 32 );
+
 			//var dat = analyser.getAverageFrequency();
 
 			var renderer = new THREE.WebGLRenderer();
@@ -111,6 +124,9 @@
 				var freq = beatanalyser.getFrequencyData();
 				var freq2 = leadanalyser.getFrequencyData();
 				var arp = arpanalyser.getAverageFrequency();
+				var bass = bassanalyser.getFrequencyData();
+
+				console.log(bass);
 
 				if(circleCoutOff<0){
 					circleCoutOff = 5;
@@ -173,7 +189,7 @@
 				cubescale = cubescale<1? 1 : cubescale;
 
 				var circscale = arp*20;
-				console.log(circscale);
+				
 				circscale = circscale<1? 1 : circscale;
 				
 
@@ -181,6 +197,7 @@
 				circle1.scale.set(circscale,circscale,circscale);
 				circle2.scale.set(circscale,circscale,circscale);
 				circle3.scale.set(circscale,circscale,circscale);
+				//camera.position.set(bass[0]/100 ,bass[0]/100,5);
 
 				requestAnimationFrame( animate );
 				renderer.render( scene, camera );
