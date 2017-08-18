@@ -51,6 +51,18 @@
 			});
 			var leadanalyser = new THREE.AudioAnalyser( leadsound, 32 );
 
+			var arplistener = new THREE.AudioListener();
+			camera.add( arplistener );
+			var arpsound = new THREE.Audio( arplistener );
+			var arpaudioLoader = new THREE.AudioLoader();
+			arpaudioLoader.load( 'arpeggio.mp3', function( arpbuffer ) {
+				arpsound.setBuffer( arpbuffer );
+				arpsound.setLoop(false);
+				arpsound.setVolume(0.01);
+				arpsound.play();
+			});
+			var arpanalyser = new THREE.AudioAnalyser( arpsound, 32 );
+
 			//var dat = analyser.getAverageFrequency();
 
 			var renderer = new THREE.WebGLRenderer();
@@ -63,6 +75,18 @@
 			cube.position.set(0,0,0);
 			scene.add( cube );
 
+			var geometry = new THREE.CircleGeometry( 0.001, 30 );
+			var material = new THREE.MeshBasicMaterial( { color: 0xffffff} );
+			var circle1 = new THREE.Mesh( geometry, material );
+			var circle2 = new THREE.Mesh( geometry, material );
+			var circle3 = new THREE.Mesh( geometry, material );
+			circle1.position.set(-2,-2,0);
+			circle2.position.set(-2,-2,0);
+			circle3.position.set(-2,-2,0);
+			scene.add( circle1 );
+			scene.add( circle2 );
+			scene.add( circle3 );
+
 			var gradient = [0xFF00FF, 0xF905FC, 0xF40AFA, 0xEF0FF8, 0xEA14F6, 0xE41AF4, 0xDF1FF2, 0xDA24F0, 0xD529EE, 0xD02EEC, 0xCA34EA, 0xC539E8, 0xC03EE6, 0xBB43E3, 0xB648E1, 0xB04EDF, 0xAB53DD, 0xA658DB, 0xA15DD9, 0x9C62D7, 0x9668D5, 0x916DD3, 0x8C72D1, 0x8777CF, 0x827CCD, 0x7C82CA, 0x7787C8, 0x728CC6, 0x6D91C4, 0x6896C2, 0x629CC0, 0x5DA1BE, 0x58A6BC, 0x53ABBA, 0x4EB0B8, 0x48B6B6, 0x43BBB4, 0x3EC0B1, 0x39C5AF, 0x34CAAD, 0x2ED0AB, 0x29D5A9, 0x24DAA7, 0x1FDFA5, 0x1AE4A3, 0x14EAA1, 0x0FEF9F, 0x0AF49D, 0x05F99B, 0x00FF99]
 
 			camera.position.z = 5;
@@ -73,6 +97,8 @@
 			var kal2 = 0;
 			var rotcount = 0;
 
+			var circleCoutOff = 5;
+
 			var deltatime = new Date();
 
 			animate();
@@ -80,11 +106,24 @@
 			function animate() {
 				var t = new Date();
 				var time = t-deltatime;
-				console.log(Math.sin(  rotcount/100 ));
+				//console.log(Math.sin(  rotcount/100 ));
 				var dat = analyser.getAverageFrequency();
 				var freq = beatanalyser.getFrequencyData();
 				var freq2 = leadanalyser.getFrequencyData();
-				//console.log(freq[5]);
+				var arp = arpanalyser.getAverageFrequency();
+
+				if(circleCoutOff<0){
+					circleCoutOff = 5;
+					circle1.position.set(getRandomPoint(-4,4),getRandomPoint(-4,4),0);
+					circle2.position.set(getRandomPoint(-4,4),getRandomPoint(-4,4),0);
+					circle3.position.set(getRandomPoint(-4,4),getRandomPoint(-4,4),0);
+
+
+				}
+				if(arp<2){
+					circleCoutOff--;
+				}
+				
 
 				if(freq[0]>threshhold){
 					var fr = freq[0]>threshhold+49? threshhold+49 : freq[0];
@@ -132,7 +171,17 @@
 				kal2 = freq2[0];
 				var cubescale = kal/150*3;
 				cubescale = cubescale<1? 1 : cubescale;
+
+				var circscale = arp*20;
+				console.log(circscale);
+				circscale = circscale<1? 1 : circscale;
+				
+
 				cube.scale.set(cubescale,cubescale,cubescale);
+				circle1.scale.set(circscale,circscale,circscale);
+				circle2.scale.set(circscale,circscale,circscale);
+				circle3.scale.set(circscale,circscale,circscale);
+
 				requestAnimationFrame( animate );
 				renderer.render( scene, camera );
 			}
@@ -153,6 +202,10 @@
 						cube.rotation.y -= 1;
 						break;
 				}
+			}
+
+			function getRandomPoint(min, max) {
+    			return Math.random() * (max - min + 1) + min;
 			}
 
 		</script>
