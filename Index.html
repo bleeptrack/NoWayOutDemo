@@ -205,16 +205,23 @@
 
 			var deltatime = new Date();
 
+			var freq = beatanalyser.getFrequencyData();
+			var freq2 = leadanalyser.getFrequencyData();
+			var arp = arpanalyser.getAverageFrequency();
+
 			animate();
 
 			function animate() {
 				var t = new Date();
 				var time = t-deltatime;
+
+				freq = beatanalyser.getFrequencyData();
+				freq2 = leadanalyser.getFrequencyData();
+				arp = arpanalyser.getAverageFrequency();
+
 				//console.log(Math.sin(  rotcount/100 ));
 				//var dat = analyser.getAverageFrequency();
-				var freq = beatanalyser.getFrequencyData();
-				var freq2 = leadanalyser.getFrequencyData();
-				var arp = arpanalyser.getAverageFrequency();
+				
 				//var bass = bassanalyser.getFrequencyData();
 				//console.log(x);
 
@@ -228,8 +235,13 @@
 					}else if(!rotationDone){
 						rotationAnimation();
 					}else{
-						scaleUPAnimation();
+						vibeAnimation();
 					}
+					/*}else if(!scaleupDone){
+						scaleUPAnimation();
+					}else{
+						prepareRotationAnimation2();
+					}*/
 
 					
 					
@@ -260,7 +272,7 @@
 
 						//cube.rotation.z += 0.449 ;
 					}
-					if(arp<2){
+					if(arp<3){
 						circleCoutOff--;
 					}
 
@@ -283,12 +295,7 @@
 				
 					
 
-					var kal = (kal1+kal2+freq2[0])/3;
-					kal1 = kal2;
-					kal2 = freq2[0];
-					//var cubescale = kal/150*3;
-					var cubescale =freq2[0]/1000 +1;
-					cubescale = cubescale<1? 1 : cubescale;
+					
 					//console.log(cubescale);
 					//cube.scale.set(cubescale,cubescale,cubescale);
 
@@ -370,6 +377,21 @@
 				renderer.render( scene, camera );
 			}
 
+			function vibeAnimation(){
+				var kal = (kal1+kal2+freq2[0])/3;
+					kal1 = kal2;
+					kal2 = freq2[0];
+					//var cubescale = kal/150*3;
+					console.log(kal);
+					var cubescale =kal/500;
+					console.log(cubescale);
+					cubescale = cubescale<0.1? 0.1 : cubescale;
+					cube.scale.set(cubescale,cubescale,cubescale);
+
+					cube.rotation.x += 0.01;
+					cube.rotation.y += 0.01;
+			}
+
 			function scaleDownAnimation(){
 				if(cube.scale.x<0.1){
 					cube.scale.x = 0.1
@@ -428,47 +450,23 @@
 
 				var degx = ((cube.rotation.x % Math.PI*2) * 180/Math.PI);
 				var degy = ((cube.rotation.y % Math.PI*2) * 180/Math.PI);
-				var degz = ((cube.rotation.z % Math.PI*2) * 180/Math.PI);
-
-				
+				var degz = ((cube.rotation.x % Math.PI*2) * 180/Math.PI);
 
 				if(degx > 175 && degx < 180){
 
 					cube.rotation.x = 1.57;
 					
 				}else{
-					cube.rotation.x += 0.1;
-				}	
-
-				/*if(344<=degz && degz<=346){
-
-					cube.rotation.z = 6.15;
-					degz = ((cube.rotation.z % Math.PI*2) * 180/Math.PI);
-					console.log(degz);
-				}else{
-					cube.rotation.z += 0.1;
-					
-				}*/
-
-
+					cube.rotation.x += 0.01;
+				}
 				if(degy > -1 && degy < 1){
 					cube.rotation.y = 0;
 				}else{
 					cube.rotation.y += 0.01;
 				}
-
-				
-
-				/*if(cube.position.y >= 3.5){
-					cube.position.y = 3.5;
-				}else{
-					cube.position.y += 0.8;
-				}*/
-				
-				/*if(cube.rotation.x == 1.57 && cube.rotation.y == 0){
+				if(cube.rotation.x == 1.57 && cube.rotation.y == 0){
 					prepDone2 = true;
-					goal = -0.13 + rot;
-				}*/
+				}
 
 				
 				
