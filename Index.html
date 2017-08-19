@@ -124,6 +124,8 @@
 					cube.scale.set( 1, 1, 1 );
 					cube.castShadow = true;
 					cube.receiveShadow = true;
+					cube.renderOrder = 0;
+					cube.material.depthTest = false; // You have been in suspension for...
 					scene.add( cube );
 				} );
 
@@ -153,12 +155,14 @@
 					bevelThickness: 0.001,
 					bevelSize: 0.03,
 				});
-				var fancyMaterial = new THREE.MeshPhongMaterial({color: 0xff00ff});
+				var fancyMaterial = new THREE.MeshPhongMaterial({color: 0xffffff});
 				textMesh = new THREE.Mesh(textGeo, fancyMaterial)
 				textMesh.position.z = 4;
 				textMesh.position.y = -3;
 				textMesh.rotation.y = 0.3;
 				textMesh.rotation.x = 0.2;
+				textMesh.renderOrder = 999999999; // You have been in suspension for...
+				textMesh.material.depthTest = false; // You have been in suspension for...
 				scene.add(textMesh);
 			} );
 
