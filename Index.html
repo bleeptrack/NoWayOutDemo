@@ -114,7 +114,8 @@
 					}
 					cube = new THREE.Mesh( geometry, meshMaterial );
 					cube.position.set( 0, 0, 0 );
-					cube.rotation.set( 1.57,0, -0.13 );
+					cube.rotation.set( 1.57,0, -0.13 );   //3
+					//cube.rotation.set( 1.57,0, 0.32 );
 					cube.scale.set( 1, 1, 1 );
 					cube.castShadow = true;
 					cube.receiveShadow = true;
@@ -180,8 +181,16 @@
 			var baseScaleY;
 			var baseScaleZ;
 
+			var rot = 0.449;
+			var goal = -0.13 + rot;
+			var wait = true;
+
+			var scaledownDone = false;
+			var prepDone = false;
+
 
 			var circleCoutOff = 5;
+			var counter = 5;
 
 			var deltatime = new Date();
 
@@ -199,22 +208,39 @@
 				//console.log(x);
 
 
-				
-				if( circleCoutOff<0){//blips
-					
-					circleCoutOff = 5;
-					circle1.position.set(getRandomPoint(-4,4),getRandomPoint(-4,4),0);
-					circle2.position.set(getRandomPoint(-4,4),getRandomPoint(-4,4),0);
-					circle3.position.set(getRandomPoint(-4,4),getRandomPoint(-4,4),0);
-
-					//x[getRandomPoint(0,9)][getRandomPoint(0,9)].scale.set(1,1,1);
-					//gameOfLive(x);
-				}
-				if(arp<2){
-					circleCoutOff--;
-				}
-
 				if(cube){
+
+					if(!scaledownDone){
+						scaleDownAnimation();
+					}else if(!prepDone){
+						prepareRotationAnimation();
+					}else{
+						rotationAnimation();
+					}
+					//rotationAnimation();
+					
+					
+					if( circleCoutOff<0){//blips
+						
+						circleCoutOff = 50;
+						circle1.position.set(getRandomPoint(-4,4),getRandomPoint(-4,4),0);
+						circle2.position.set(getRandomPoint(-4,4),getRandomPoint(-4,4),0);
+						circle3.position.set(getRandomPoint(-4,4),getRandomPoint(-4,4),0);
+
+						//x[getRandomPoint(0,9)][getRandomPoint(0,9)].scale.set(1,1,1);
+						//gameOfLive(x);
+
+						
+
+						//cube.rotation.z += 0.449 ;
+					}
+					if(arp<2){
+						circleCoutOff--;
+					}
+
+					
+
+				
 
 					if(freq[0]>threshhold){
 						var fr = freq[0]>threshhold+49? threshhold+49 : freq[0];
@@ -229,8 +255,7 @@
 						fade--;
 					}
 				
-					//cube.rotation.x += 0.01;
-					//cube.rotation.y += 0.01;
+					
 
 					var kal = (kal1+kal2+freq2[0])/3;
 					kal1 = kal2;
@@ -243,11 +268,13 @@
 
 
 					//debug rotation
-					cube.scale.x = 0.1;
+					/*cube.scale.x = 0.1;
 					cube.scale.y = 0.1;
-					cube.scale.z = 0.1;
+					cube.scale.z = 0.1;*/
 					
 
+					
+					
 
 					/*if(cube.scale.x>0.1){
 						cube.scale.x -= 0.0008;
@@ -311,6 +338,65 @@
 
 				requestAnimationFrame( animate );
 				renderer.render( scene, camera );
+			}
+
+			function scaleDownAnimation(){
+				if(cube.scale.x<0.1){
+					cube.scale.x = 0.1
+					cube.scale.y = 0.1;
+					cube.scale.z = 0.1;
+					scaledownDone = true;
+				}else{
+					cube.scale.x -= 0.0008;
+					cube.scale.y -= 0.0008;
+					cube.scale.z -= 0.0008;
+				}
+				cube.rotation.x += 0.01;
+				cube.rotation.y += 0.01;
+			}
+
+			function prepareRotationAnimation(){
+
+				var degx = ((cube.rotation.x % Math.PI*2) * 180/Math.PI);
+				var degy = ((cube.rotation.y % Math.PI*2) * 180/Math.PI);
+				var degz = ((cube.rotation.x % Math.PI*2) * 180/Math.PI);
+
+				if(degx > 179 && degx < 180){
+
+					cube.rotation.x = 1.57;
+					
+				}else{
+					cube.rotation.x += 0.01;
+				}
+				if(degy > -1 && degy < 1){
+					cube.rotation.y = 0;
+				}else{
+					cube.rotation.y += 0.01;
+				}
+				if(cube.rotation.x == 1.57 && cube.rotation.y == 0){
+					prepDone = true;
+				}
+				
+			}
+
+			function rotationAnimation(){
+
+				if(cube.rotation.z>goal){
+					cube.rotation.z = goal;
+					counter = 50;
+					wait = true;
+					goal +=  rot;
+				}
+				if(counter<0){
+					wait = false;
+				}
+				if(wait){
+					counter--;
+				}
+				if(!wait){
+					cube.rotation.z += 0.01;				
+				}
+
 			}
 
 			function randrot(){
