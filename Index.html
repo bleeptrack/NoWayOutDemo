@@ -328,6 +328,8 @@
 					textMesh.position.y -= 0.0012;
 				}
 
+				pointLight.position.y = 100*Math.sin(t/2000);
+
 				if (fadeBlack) {
 					pointLight.intensity -= 0.01;
 					dirLight.intensity -= 0.01;
