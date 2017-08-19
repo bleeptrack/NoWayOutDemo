@@ -100,7 +100,41 @@
 			scene.add( circle2 );
 			scene.add( circle3 );
 
+<<<<<<< HEAD
 			/*var geometry = new THREE.CircleGeometry( 0.1, 30 );
+=======
+			var dirLight = new THREE.DirectionalLight( 0xffffff, 0.125 );
+			dirLight.position.set( 0, 0, 1 ).normalize();
+			scene.add( dirLight );
+			var pointLight = new THREE.PointLight( 0xffffff, 1.5 );
+			pointLight.position.set( 0, 100, 90 );
+			scene.add( pointLight );
+
+			var text = "Hello Evoke. This is a very long text. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet."
+			var textMesh = undefined;
+
+			var loader = new THREE.FontLoader();
+			loader.load( 'optimer_regular.typeface.json', function ( response ) {
+				var font = response;
+				var textGeo = new THREE.TextBufferGeometry( text, {
+					font: font,
+					size: 0.5,
+					height: 0.08,
+					material: 0,
+					extrudeMaterial: 0.01,
+					bevelEnabled: true,
+					bevelThickness: 0.001,
+					bevelSize: 0.03,
+				});
+				var fancyMaterial = new THREE.MeshPhongMaterial({color: 0xff00ff});
+				textMesh = new THREE.Mesh(textGeo, fancyMaterial)
+				textMesh.position.z = 1;
+				textMesh.position.y = -2;
+				scene.add(textMesh);
+			} );
+
+			var geometry = new THREE.CircleGeometry( 0.1, 30 );
+>>>>>>> 5a32af5faaafa140ff228e5ff402f76f5066cf16
 			var x = new Array(10);
 			for (var i = 0; i < 10; i++) {
 			  x[i] = new Array(10);
@@ -203,6 +237,36 @@
 
 				cube.rotation.x += 0.01;
 				cube.rotation.y += 0.01;
+<<<<<<< HEAD
+=======
+
+				if (textMesh) {
+					textMesh.position.x -= 0.02;
+				}
+
+				/*if(t-startTime>42000){
+					camera.position.x = cube.position.x + 10 * Math.sin(  rotcount/100 );
+					camera.position.y = cube.position.y + 10 * Math.cos(  rotcount/100 );
+					camera.lookAt( cube.position );
+					rotcount++;       
+					
+
+				}else if(t-startTime>17000){
+                    if(time>450){
+						deltatime = new Date();
+						randrot();
+						
+					}
+				}else if(t-startTime>50){
+					if(time>950){
+						deltatime = new Date();
+						randrot();
+						
+					}
+					
+				}*/
+
+>>>>>>> 5a32af5faaafa140ff228e5ff402f76f5066cf16
 				
 
 				var kal = (kal1+kal2+freq2[0])/3;
