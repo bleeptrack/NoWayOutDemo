@@ -20,6 +20,7 @@
 			camera.zoom = 100;
 			camera.updateProjectionMatrix();
 
+			var fadeBlack = false;
 			var listener = new THREE.AudioListener();
 			camera.add( listener );
 			var sound = new THREE.Audio( listener );
@@ -29,6 +30,9 @@
 				sound.setLoop(false);
 				sound.setVolume(0.5);
 				sound.play();
+				sound.source.onended = function() {
+					fadeBlack = true;
+				}
 			});
 			//var analyser = new THREE.AudioAnalyser( sound, 32 );
 
@@ -133,7 +137,7 @@
 			pointLight.position.set( 0, 100, 90 );
 			scene.add( pointLight );
 
-			var text = "Hello Evoke. This is a very long text. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet."
+			var text = "Ohai! This is our first time at Evoke! ...or, uh, at *any* demoparty, for that matter! Let us tell you a story. We knew we wanted to contribute something. So when we arrived, we told a friend that we had an idea for a demo. He replied: 'What, for next year?' Because his group had been working on theirs for months. Encouraged, we got to work. Uh, so... take this demo as our 'Hello World!' Most of it was created in the last 24 hours. If you're reading this, the demo made it past preselection, yay! :> Happy birthday, Evoke! Here's to another 20 years! This might be our first Evoke, but it certainly won't be our last!"
 			var textMesh = undefined;
 
 			var loader = new THREE.FontLoader();
@@ -151,8 +155,10 @@
 				});
 				var fancyMaterial = new THREE.MeshPhongMaterial({color: 0xff00ff});
 				textMesh = new THREE.Mesh(textGeo, fancyMaterial)
-				textMesh.position.z = 1;
-				textMesh.position.y = -2;
+				textMesh.position.z = 4;
+				textMesh.position.y = -3;
+				textMesh.rotation.y = 0.3;
+				textMesh.rotation.x = 0.2;
 				scene.add(textMesh);
 			} );
 
@@ -309,10 +315,14 @@
 					
 				}
 
-
-
 				if (textMesh) {
 					textMesh.position.x -= 0.02;
+					textMesh.position.y -= 0.0012;
+				}
+
+				if (fadeBlack) {
+					pointLight.intensity -= 0.01;
+					dirLight.intensity -= 0.01;
 				}
 
 				/*if(t-startTime>42000){
