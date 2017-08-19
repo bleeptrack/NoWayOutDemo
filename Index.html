@@ -139,7 +139,7 @@
 			pointLight.position.set( 0, 100, 90 );
 			scene.add( pointLight );
 
-			var text = "Ohai! This is our first time at Evoke! ...or, uh, at *any* demoparty, for that matter! Let us tell you a story. We knew we wanted to contribute something. So when we arrived, we told a friend that we had an idea for a demo. He replied: 'What, for next year?' Because his group had been working on theirs for months. Encouraged, we got to work. Uh, so... take this demo as our 'Hello World!' Most of it was created in the last 24 hours. If you're reading this, the demo made it past preselection, yay! :> Happy birthday, Evoke! Here's to another 20 years! This might be our first Evoke, but it certainly won't be our last!"
+			var text = "Ohai! :3 This is our first time at Evoke! ...or, uh, at *any* demoparty, for that matter! Let us tell you a story. We knew we wanted to contribute something. So when we arrived, we told a friend that we had an idea for a demo. He replied: 'What, for next year?' Because his group had been working on theirs for months. Encouraged, we got to work. Uh, so... take this demo as our 'Hello World!' Most of it was created in the last 24 hours. If you're reading this, the demo made it past preselection, yay! :> Happy birthday, Evoke! Here's to another 20 years! This might be our first Evoke, but it certainly won't be our last!"
 			var textMesh = undefined;
 
 			var loader = new THREE.FontLoader();
@@ -148,7 +148,7 @@
 				var textGeo = new THREE.TextBufferGeometry( text, {
 					font: font,
 					size: 0.5,
-					height: 0.08,
+					height: 0.2,
 					material: 0,
 					extrudeMaterial: 0.01,
 					bevelEnabled: true,
@@ -162,7 +162,7 @@
 				textMesh.rotation.y = 0.3;
 				textMesh.rotation.x = 0.2;
 				textMesh.renderOrder = 999999999; // You have been in suspension for...
-				textMesh.material.depthTest = false; // You have been in suspension for...
+				textMesh.material.depthTest = true;
 				scene.add(textMesh);
 			} );
 
