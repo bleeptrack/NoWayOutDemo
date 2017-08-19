@@ -150,8 +150,10 @@
 				});
 				var fancyMaterial = new THREE.MeshPhongMaterial({color: 0xff00ff});
 				textMesh = new THREE.Mesh(textGeo, fancyMaterial)
-				textMesh.position.z = 1;
-				textMesh.position.y = -2;
+				textMesh.position.z = 4;
+				textMesh.position.y = -3;
+				textMesh.rotation.y = 0.3;
+				textMesh.rotation.x = 0.2;
 				scene.add(textMesh);
 			} );
 
@@ -293,10 +295,9 @@
 					
 				}
 
-
-
 				if (textMesh) {
 					textMesh.position.x -= 0.02;
+					textMesh.position.y -= 0.0012;
 				}
 
 				/*if(t-startTime>42000){
