@@ -20,6 +20,7 @@
 			camera.zoom = 100;
 			camera.updateProjectionMatrix();
 
+			var fadeBlack = false;
 			var listener = new THREE.AudioListener();
 			camera.add( listener );
 			var sound = new THREE.Audio( listener );
@@ -29,6 +30,9 @@
 				sound.setLoop(false);
 				sound.setVolume(0.5);
 				sound.play();
+				sound.source.onended = function() {
+					fadeBlack = true;
+				}
 			});
 			//var analyser = new THREE.AudioAnalyser( sound, 32 );
 
@@ -298,6 +302,11 @@
 				if (textMesh) {
 					textMesh.position.x -= 0.02;
 					textMesh.position.y -= 0.0012;
+				}
+
+				if (fadeBlack) {
+					pointLight.intensity -= 0.01;
+					dirLight.intensity -= 0.01;
 				}
 
 				/*if(t-startTime>42000){
