@@ -10,6 +10,7 @@
 	</head>
 	<body>
 		<script src="scripts/three.js"></script>
+		<script src="scripts/STLLoader.js"></script>
 
 		<script>
 			startTime = new Date();
@@ -26,7 +27,7 @@
 				sound.setVolume(0.5);
 				sound.play();
 			});
-			var analyser = new THREE.AudioAnalyser( sound, 32 );
+			//var analyser = new THREE.AudioAnalyser( sound, 32 );
 
 			var beatlistener = new THREE.AudioListener();
 			camera.add( beatlistener );
@@ -64,7 +65,7 @@
 			});
 			var arpanalyser = new THREE.AudioAnalyser( arpsound, 32 );
 
-			var basslistener = new THREE.AudioListener();
+			/*var basslistener = new THREE.AudioListener();
 			camera.add( basslistener );
 			var basssound = new THREE.Audio( arplistener );
 			var bassaudioLoader = new THREE.AudioLoader();
@@ -74,7 +75,7 @@
 				basssound.setVolume(0.01);
 				basssound.play();
 			});
-			var bassanalyser = new THREE.AudioAnalyser( basssound, 32 );
+			var bassanalyser = new THREE.AudioAnalyser( basssound, 32 );*/
 
 			//var dat = analyser.getAverageFrequency();
 
@@ -82,11 +83,11 @@
 			renderer.setSize( window.innerWidth, window.innerHeight );
 			document.body.appendChild( renderer.domElement );
 
-			var geometry = new THREE.BoxGeometry( 1, 1, 1 );
+			/*var geometry = new THREE.BoxGeometry( 1, 1, 1 );
 			var material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
 			var cube = new THREE.Mesh( geometry, material );
 			cube.position.set(0,0,0);
-			scene.add( cube );
+			scene.add( cube );*/
 
 			var geometry = new THREE.CircleGeometry( 0.0001, 30 );
 			var material = new THREE.MeshBasicMaterial( { color: 0xffffff} );
@@ -100,9 +101,26 @@
 			scene.add( circle2 );
 			scene.add( circle3 );
 
-<<<<<<< HEAD
-			/*var geometry = new THREE.CircleGeometry( 0.1, 30 );
-=======
+			var material = new THREE.MeshPhongMaterial( { color: 0xAAAAAA, specular: 0x111111, shininess: 200 } );
+			var loader = new THREE.STLLoader();
+			var cube;
+			loader.load( 'Evokeh.stl', function ( geometry ) {
+					var meshMaterial = material;
+					if (geometry.hasColors) {
+						meshMaterial = new THREE.MeshPhongMaterial({ opacity: geometry.alpha, vertexColors: THREE.VertexColors });
+					}
+					cube = new THREE.Mesh( geometry, meshMaterial );
+					cube.position.set( 0, 0, 0 );
+					cube.rotation.set( 0,0, 0 );
+					cube.scale.set( 1, 1, 1 );
+					cube.castShadow = true;
+					cube.receiveShadow = true;
+					scene.add( cube );
+				} );
+
+
+			var geometry = new THREE.CircleGeometry( 0.1, 30 );
+
 			var dirLight = new THREE.DirectionalLight( 0xffffff, 0.125 );
 			dirLight.position.set( 0, 0, 1 ).normalize();
 			scene.add( dirLight );
@@ -134,8 +152,8 @@
 			} );
 
 			var geometry = new THREE.CircleGeometry( 0.1, 30 );
->>>>>>> 5a32af5faaafa140ff228e5ff402f76f5066cf16
-			var x = new Array(10);
+
+			/*var x = new Array(10);
 			for (var i = 0; i < 10; i++) {
 			  x[i] = new Array(10);
 			  for (var j = 0; j < 10; j++) {
@@ -155,6 +173,11 @@
 			var kal2 = 0;
 			var rotcount = 0;
 
+			var baseScaleX;
+			var baseScaleY;
+			var baseScaleZ;
+
+
 			var circleCoutOff = 5;
 
 			var deltatime = new Date();
@@ -165,11 +188,11 @@
 				var t = new Date();
 				var time = t-deltatime;
 				//console.log(Math.sin(  rotcount/100 ));
-				var dat = analyser.getAverageFrequency();
+				//var dat = analyser.getAverageFrequency();
 				var freq = beatanalyser.getFrequencyData();
 				var freq2 = leadanalyser.getFrequencyData();
 				var arp = arpanalyser.getAverageFrequency();
-				var bass = bassanalyser.getFrequencyData();
+				//var bass = bassanalyser.getFrequencyData();
 				//console.log(x);
 
 				/*for(var i = 0; i < 10; i++) {
@@ -220,25 +243,50 @@
 					circleCoutOff--;
 				}
 
-				if(freq[0]>threshhold){
-					var fr = freq[0]>threshhold+49? threshhold+49 : freq[0];
-					fade = (fr-threshhold);
-					
-				}else{
-					cube.material.color.setHex( gradient[0] );
-				}
+				if(cube){
 
-				if(fade>0){
-					cube.material.color.setHex( gradient[fade] );
-					fade--;
-				}
+					if(freq[0]>threshhold){
+						var fr = freq[0]>threshhold+49? threshhold+49 : freq[0];
+						fade = (fr-threshhold);
+						
+					}else{
+						cube.material.color.setHex( gradient[0] );
+					}
 
+					if(fade>0){
+						cube.material.color.setHex( gradient[fade] );
+						fade--;
+					}
 				
+					cube.rotation.x += 0.01;
+					cube.rotation.y += 0.01;
 
-				cube.rotation.x += 0.01;
-				cube.rotation.y += 0.01;
-<<<<<<< HEAD
-=======
+					var kal = (kal1+kal2+freq2[0])/3;
+					kal1 = kal2;
+					kal2 = freq2[0];
+					//var cubescale = kal/150*3;
+					var cubescale =freq2[0]/1000 +1;
+					cubescale = cubescale<1? 1 : cubescale;
+					//console.log(cubescale);
+					//cube.scale.set(cubescale,cubescale,cubescale);
+					if(cube.scale.x>0.1){
+						cube.scale.x -= 0.0008;
+						cube.scale.y -= 0.0008;
+						cube.scale.z -= 0.0008;
+						baseScaleX = cube.scale.x;
+						baseScaleY = cube.scale.y;
+						baseScaleZ = cube.scale.z;
+					}
+					else{
+						console.log(cube.scale.y);
+						cube.scale.x =  baseScaleX * cubescale;
+						cube.scale.y =  baseScaleY * cubescale;
+						cube.scale.z =  baseScaleZ * cubescale;
+					}
+					
+				}
+
+
 
 				if (textMesh) {
 					textMesh.position.x -= 0.02;
@@ -266,14 +314,10 @@
 					
 				}*/
 
->>>>>>> 5a32af5faaafa140ff228e5ff402f76f5066cf16
+
 				
 
-				var kal = (kal1+kal2+freq2[0])/3;
-				kal1 = kal2;
-				kal2 = freq2[0];
-				var cubescale = kal/150*3;
-				cubescale = cubescale<1? 1 : cubescale;
+				
 
 				var circscale = arp*200;
 				
@@ -283,7 +327,7 @@
 				circle3.scale.set(circscale,circscale,circscale);
 
 
-				cube.scale.set(cubescale,cubescale,cubescale);
+				
 
 				requestAnimationFrame( animate );
 				renderer.render( scene, camera );
@@ -308,7 +352,7 @@
 			}
 
 			function getRandomPoint(min, max) {
-    			return Math.floor(Math.random() * (max - min + 1)) + min;
+    			return Math.random() * (max - min + 1) + min;
 			}
 
 			function gameOfLive(field){
@@ -344,7 +388,7 @@
 				var count = 0;
 				
 				for(var n = 0; n<3; n++){
-					console.log(i-(n-1));
+					//console.log(i-(n-1));
 					if(field[i-(n-1)][j-1].scale.x>0.5){
 						count++;
 					}
