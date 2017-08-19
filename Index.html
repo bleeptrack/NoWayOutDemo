@@ -118,10 +118,10 @@
 					}
 					cube = new THREE.Mesh( geometry, meshMaterial );
 					cube.position.set( 0, 0, 0 );
-					cube.rotation.set( 0,0, 0 );   //3
+					cube.rotation.set( 1.57 ,0, -0.13 );   //3
 					//cube.rotation.set( 1.57,0, 0.32 );
 					//cube.scale.set( 1, 1, 1 );
-					cube.scale.set( 0.1, 0.1, 0.1 );
+					cube.scale.set( 1, 1, 1 );
 					cube.castShadow = true;
 					cube.receiveShadow = true;
 					scene.add( cube );
@@ -191,11 +191,13 @@
 			var rot = 0.449;
 			var goal = -0.13 + rot;
 			var wait = true;
+			var letter = 0;
 
 			var scaledownDone = false;
 			var prepDone = false;
 			var prepDone2 = false;
 			var scaleupDone = false;
+			var rotationDone = false;
 
 
 			var circleCoutOff = 5;
@@ -219,21 +221,23 @@
 
 				if(cube){
 
-					/*if(!scaledownDone){
+					if(!scaledownDone){
 						scaleDownAnimation();
 					}else if(!prepDone){
 						prepareRotationAnimation();
-					}else{
+					}else if(!rotationDone){
 						rotationAnimation();
-					}*/
+					}else{
+						scaleUPAnimation();
+					}
 
 					
 					
-					if(!scaleupDone){
+					/*if(!scaleupDone){
 						scaleUPAnimation();
 					}else if(!prepDone2){
 						prepareRotationAnimation2();
-					}
+					}*/
 					//}else{
 						//rotationAnimation();
 					//}
@@ -244,7 +248,7 @@
 					
 					if( circleCoutOff<0){//blips
 						
-						circleCoutOff = 50;
+						circleCoutOff = 5;
 						circle1.position.set(getRandomPoint(-4,4),getRandomPoint(-4,4),0);
 						circle2.position.set(getRandomPoint(-4,4),getRandomPoint(-4,4),0);
 						circle3.position.set(getRandomPoint(-4,4),getRandomPoint(-4,4),0);
@@ -407,7 +411,7 @@
 					cube.rotation.x = 1.57;
 					
 				}else{
-					cube.rotation.x += 0.1;
+					cube.rotation.x += 0.01;
 				}
 				if(degy > -1 && degy < 1){
 					cube.rotation.y = 0;
@@ -477,6 +481,7 @@
 					counter = 50;
 					wait = true;
 					goal +=  rot;
+					letter++;
 				}
 				if(counter<0){
 					wait = false;
@@ -486,6 +491,9 @@
 				}
 				if(!wait){
 					cube.rotation.z += 0.01;				
+				}
+				if(letter == 6){
+					rotationDone = true;
 				}
 
 			}
