@@ -100,6 +100,40 @@
 			scene.add( circle2 );
 			scene.add( circle3 );
 
+
+			var dirLight = new THREE.DirectionalLight( 0xffffff, 0.125 );
+			dirLight.position.set( 0, 0, 1 ).normalize();
+			scene.add( dirLight );
+			var pointLight = new THREE.PointLight( 0xffffff, 1.5 );
+			pointLight.position.set( 0, 100, 90 );
+			scene.add( pointLight );
+
+			var text = "Hello Evoke. This is a very long text. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet."
+			var textMesh = undefined;
+
+			var loader = new THREE.FontLoader();
+			loader.load( 'optimer_regular.typeface.json', function ( response ) {
+				var font = response;
+				var textGeo = new THREE.TextBufferGeometry( text, {
+					font: font,
+					size: 100,
+					height: 40,
+					material: 0,
+					extrudeMaterial: 0.01,
+					bevelEnabled: true,
+					bevelThickness: 0.001,
+					bevelSize: 5,
+					/*curveSegments: curveSegments,
+					*/
+				});
+				var fancyMaterial = new THREE.MeshPhongMaterial({color: 0xff00ff});
+				textMesh = new THREE.Mesh(textGeo, fancyMaterial)
+				textMesh.position.z = -1000;
+				textMesh.position.y = -500;
+				scene.add(textMesh);
+				//refreshText();
+			} );
+
 			var gradient = [0xFF00FF, 0xF905FC, 0xF40AFA, 0xEF0FF8, 0xEA14F6, 0xE41AF4, 0xDF1FF2, 0xDA24F0, 0xD529EE, 0xD02EEC, 0xCA34EA, 0xC539E8, 0xC03EE6, 0xBB43E3, 0xB648E1, 0xB04EDF, 0xAB53DD, 0xA658DB, 0xA15DD9, 0x9C62D7, 0x9668D5, 0x916DD3, 0x8C72D1, 0x8777CF, 0x827CCD, 0x7C82CA, 0x7787C8, 0x728CC6, 0x6D91C4, 0x6896C2, 0x629CC0, 0x5DA1BE, 0x58A6BC, 0x53ABBA, 0x4EB0B8, 0x48B6B6, 0x43BBB4, 0x3EC0B1, 0x39C5AF, 0x34CAAD, 0x2ED0AB, 0x29D5A9, 0x24DAA7, 0x1FDFA5, 0x1AE4A3, 0x14EAA1, 0x0FEF9F, 0x0AF49D, 0x05F99B, 0x00FF99]
 
 			camera.position.z = 5;
@@ -158,6 +192,11 @@
 
 				cube.rotation.x += 0.01;
 				cube.rotation.y += 0.01;
+
+				if (textMesh) {
+					textMesh.position.x -= 5;
+				}
+
 				/*if(t-startTime>42000){
 					camera.position.x = cube.position.x + 10 * Math.sin(  rotcount/100 );
 					camera.position.y = cube.position.y + 10 * Math.cos(  rotcount/100 );
