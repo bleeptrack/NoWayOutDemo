@@ -114,9 +114,10 @@
 					}
 					cube = new THREE.Mesh( geometry, meshMaterial );
 					cube.position.set( 0, 0, 0 );
-					cube.rotation.set( 1.57,0, -0.13 );   //3
+					cube.rotation.set( 0,0, 0 );   //3
 					//cube.rotation.set( 1.57,0, 0.32 );
-					cube.scale.set( 1, 1, 1 );
+					//cube.scale.set( 1, 1, 1 );
+					cube.scale.set( 0.1, 0.1, 0.1 );
 					cube.castShadow = true;
 					cube.receiveShadow = true;
 					scene.add( cube );
@@ -187,6 +188,8 @@
 
 			var scaledownDone = false;
 			var prepDone = false;
+			var prepDone2 = false;
+			var scaleupDone = false;
 
 
 			var circleCoutOff = 5;
@@ -210,13 +213,26 @@
 
 				if(cube){
 
-					if(!scaledownDone){
+					/*if(!scaledownDone){
 						scaleDownAnimation();
 					}else if(!prepDone){
 						prepareRotationAnimation();
 					}else{
 						rotationAnimation();
+					}*/
+
+					
+					
+					if(!scaleupDone){
+						scaleUPAnimation();
+					}else if(!prepDone2){
+						prepareRotationAnimation2();
 					}
+					//}else{
+						//rotationAnimation();
+					//}
+					
+					
 					//rotationAnimation();
 					
 					
@@ -355,18 +371,33 @@
 				cube.rotation.y += 0.01;
 			}
 
+			function scaleUPAnimation(){
+				if(cube.scale.x>=0.7){
+					cube.scale.x = 0.7;
+					cube.scale.y = 0.7;
+					cube.scale.z = 0.7;
+					scaleupDone = true;
+				}else{
+					cube.scale.x += 0.0008;
+					cube.scale.y += 0.0008;
+					cube.scale.z += 0.0008;
+				}
+				cube.rotation.x += 0.01;
+				cube.rotation.y += 0.01;
+			}
+
 			function prepareRotationAnimation(){
 
 				var degx = ((cube.rotation.x % Math.PI*2) * 180/Math.PI);
 				var degy = ((cube.rotation.y % Math.PI*2) * 180/Math.PI);
 				var degz = ((cube.rotation.x % Math.PI*2) * 180/Math.PI);
 
-				if(degx > 179 && degx < 180){
+				if(degx > 175 && degx < 180){
 
 					cube.rotation.x = 1.57;
 					
 				}else{
-					cube.rotation.x += 0.01;
+					cube.rotation.x += 0.1;
 				}
 				if(degy > -1 && degy < 1){
 					cube.rotation.y = 0;
@@ -376,6 +407,56 @@
 				if(cube.rotation.x == 1.57 && cube.rotation.y == 0){
 					prepDone = true;
 				}
+				
+			}
+
+			function prepareRotationAnimation2(){
+
+				var degx = ((cube.rotation.x % Math.PI*2) * 180/Math.PI);
+				var degy = ((cube.rotation.y % Math.PI*2) * 180/Math.PI);
+				var degz = ((cube.rotation.z % Math.PI*2) * 180/Math.PI);
+
+				
+
+				if(degx > 175 && degx < 180){
+
+					cube.rotation.x = 1.57;
+					
+				}else{
+					cube.rotation.x += 0.1;
+				}	
+
+				/*if(344<=degz && degz<=346){
+
+					cube.rotation.z = 6.15;
+					degz = ((cube.rotation.z % Math.PI*2) * 180/Math.PI);
+					console.log(degz);
+				}else{
+					cube.rotation.z += 0.1;
+					
+				}*/
+
+
+				if(degy > -1 && degy < 1){
+					cube.rotation.y = 0;
+				}else{
+					cube.rotation.y += 0.01;
+				}
+
+				
+
+				/*if(cube.position.y >= 3.5){
+					cube.position.y = 3.5;
+				}else{
+					cube.position.y += 0.8;
+				}*/
+				
+				/*if(cube.rotation.x == 1.57 && cube.rotation.y == 0){
+					prepDone2 = true;
+					goal = -0.13 + rot;
+				}*/
+
+				
 				
 			}
 
